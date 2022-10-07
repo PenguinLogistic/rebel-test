@@ -21,10 +21,6 @@ app
 
     server.use("/api/roster", rosterRoutes);
 
-    // useEffect(() => {
-    //   const res = await axios.get('http://localhost:3000/api/roster')
-    // }, []);
-
     server.get("*", (req, res) => {
       return handle(req, res);
     });

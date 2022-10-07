@@ -5,4 +5,8 @@ module.exports = {
     const foundRosters = await Roster.find();
     return foundRosters;
   },
+  createRoster: async (data) => {
+    const createdRoster = await Roster.create(data);
+    return createdRoster;
+  },
 };

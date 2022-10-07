@@ -4,10 +4,16 @@ const router = express.Router();
 
 // /api/roster
 router.get("/", async (req, res) => {
-  console.log("looking for all entries...");
   const allEntries = await rosterServices.find();
   res.send(allEntries);
   return allEntries;
+});
+
+router.post("/", async (req, res) => {
+  const createdRoster = await rosterServices.create(req.body);
+  return res.status(200).send("yeay");
+  // missing return/res.status code here
+  // so you're not actually doing anything here after create
 });
 
 // /api/roster/:id
