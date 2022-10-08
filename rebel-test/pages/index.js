@@ -14,6 +14,7 @@ export default function Index() {
     setData(res.data);
   };
 
+  //A request to add a new artist based on user form input
   const createArtist = async (event) => {
     event.preventDefault();
     handleShow(show);

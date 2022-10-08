@@ -12,11 +12,11 @@ export default function popUp({ show, handler, addFunc }) {
         <Form as="form" onSubmit={addFunc}>
           <Form.Group>
             <Form.Label>Artist</Form.Label>
-            <Form.Control type="text" autoFocus />
+            <Form.Control type="text" autoFocus required />
             <Form.Label>Rate</Form.Label>
-            <Form.Control type="number" step="any" />
+            <Form.Control type="number" step="any" min="0" required />
             <Form.Label>Streams</Form.Label>
-            <Form.Control type="number" />
+            <Form.Control type="number" min="0" required />
           </Form.Group>
           <Button onClick={handler}>Close</Button>
           <Button type="submit">Add</Button>
