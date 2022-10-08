@@ -1,4 +1,4 @@
-const Roster = require("../models/modelRoster");
+const Roster = require("../service/modelRoster");
 
 module.exports = {
   getAllRosters: async () => {
@@ -8,5 +8,9 @@ module.exports = {
   createRoster: async (data) => {
     const createdRoster = await Roster.create(data);
     return createdRoster;
+  },
+  searchRoster: async (data) => {
+    const searchedRoster = await Roster.find(data);
+    return searchedRoster;
   },
 };

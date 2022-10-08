@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 const rosterSchema = mongoose.Schema({
-  artist: String,
+  artist: { type: String, unique: true },
   rate: Number,
   streams: Number,
 });

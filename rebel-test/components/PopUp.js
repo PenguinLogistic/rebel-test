@@ -1,5 +1,4 @@
 import { Modal, Button, Form } from "react-bootstrap";
-import InputForm from "../components/InputForm";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 export default function popUp({ show, handler, addFunc }) {
