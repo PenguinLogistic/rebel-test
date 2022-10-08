@@ -22,15 +22,27 @@ router.post("/", async (req, res) => {
 // /api/roster/:id
 router.get("/:id", async (req, res) => {
   try {
-    const findEntries = await rosterServices.find({
+    const foundEntries = await rosterServices.find({
       artist: {
         $regex: req.query.name,
         $options: "i",
       },
     });
-    res.send(findEntries);
+    res.send(foundEntries);
     res.status(200);
-    return findEntries;
+    return foundEntries;
+  } catch (err) {
+    return res.status(500).send(err);
+  }
+});
+
+// /api/roster/:id
+router.put("/:id", async (req, res) => {
+  try {
+    const updatedEntry = await rosterServices.findByIdAndUpdate(req.body.id, {
+      rate: req.body.rate,
+    });
+    res.status(200).send("Successfully updated an entry!");
   } catch (err) {
     return res.status(500).send(err);
   }

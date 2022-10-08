@@ -13,4 +13,8 @@ module.exports = {
     const searchedRoster = await Roster.find(data);
     return searchedRoster;
   },
+  updateRoster: async (id, data) => {
+    const updatedRoster = await Roster.findByIdAndUpdate(id, data);
+    return updatedRoster;
+  },
 };
