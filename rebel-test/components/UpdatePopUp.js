@@ -19,7 +19,7 @@ export default function UpdatePopUp({ show, handler, artist, onUpdate }) {
               required
             />
           </Form.Group>
-          <Button onClick={handler}>Close</Button>
+          <Button onClick={handler}>Exit</Button>
           <Button type="submit">Update</Button>
         </Form>
       </Modal.Body>

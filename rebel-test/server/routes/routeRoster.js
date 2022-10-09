@@ -10,6 +10,7 @@ router.get("/", async (req, res) => {
   return allEntries;
 });
 
+// /api/roster Adding db document
 router.post("/", async (req, res) => {
   try {
     const createdRoster = await rosterServices.create(req.body);
@@ -19,7 +20,7 @@ router.post("/", async (req, res) => {
   }
 });
 
-// /api/roster/:id
+// /api/roster/:id Search db documents
 router.get("/:id", async (req, res) => {
   try {
     const foundEntries = await rosterServices.find({
@@ -36,15 +37,24 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-// /api/roster/:id
+// /api/roster/:id Updating a db document
 router.put("/:id", async (req, res) => {
   try {
-    const updatedEntry = await rosterServices.findByIdAndUpdate(req.body.id, {
+    const updatedEntry = await rosterServices.findByIdAndUpdate(req.params.id, {
       rate: req.body.rate,
     });
     res.status(200).send("Successfully updated an entry!");
   } catch (err) {
     return res.status(500).send(err);
+  }
+});
+
+router.delete("/:id", async (req, res) => {
+  try {
+    const deletedEntry = await rosterServices.findByIdAndRemove(req.params.id);
+    res.status(200).send("Successfully deleted an entry!");
+  } catch (err) {
+    res.status(500).send(err);
   }
 });
 

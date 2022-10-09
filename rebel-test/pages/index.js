@@ -4,12 +4,14 @@ import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
 import AddPopUp from "../components/AddPopUp";
 import UpdatePopUp from "../components/UpdatePopUp";
+import DeletePopUp from "../components/DeletePopUp";
 import SearchBar from "../components/SearchBar";
 
 export default function Index() {
   const [artistData, setData] = useState([]);
   const [show, setShow] = useState(false);
   const [showUpdate, setUpdate] = useState(false);
+  const [showDelete, setDelete] = useState(false);
   const [artistEntry, setEntry] = useState("");
 
   //Request to grab all rows of data from the database
@@ -22,11 +24,13 @@ export default function Index() {
   const createArtist = async (event) => {
     event.preventDefault();
     handleShow(show);
-    const res = await axios.post("/api/roster", {
-      artist: event.target[0].value.trim(),
-      rate: event.target[1].value,
-      streams: event.target[2].value,
-    });
+    if (event.target[0].value.trim() !== "") {
+      const res = await axios.post("/api/roster", {
+        artist: event.target[0].value.trim(),
+        rate: event.target[1].value,
+        streams: event.target[2].value,
+      });
+    }
     fetchDefault();
   };
 
@@ -47,12 +51,21 @@ export default function Index() {
   //Request to update the rate for an artist in the db
   const updateRate = async (event) => {
     event.preventDefault();
-    const res = await axios.put("/api/roster/:id", {
-      id: artistEntry._id,
+    const res = await axios.put(`/api/roster/${artistEntry._id}`, {
       rate: event.target[0].value,
     });
     handleUpdate();
     setEntry("");
+    fetchDefault();
+  };
+
+  //Request to delete an artist in the db
+  const deleteArtist = async (event) => {
+    event.preventDefault();
+    console.log(artistEntry._id);
+    const res = await axios.delete(`api/roster/${artistEntry._id}`);
+    setEntry("");
+    handleDelete();
     fetchDefault();
   };
 
@@ -62,6 +75,10 @@ export default function Index() {
 
   const handleUpdate = () => {
     setUpdate(!showUpdate);
+  };
+
+  const handleDelete = () => {
+    setDelete(!showDelete);
   };
 
   //Initial call, and also used to refresh the page
@@ -97,12 +114,18 @@ export default function Index() {
               </Button>
             </Col>
             <Col>
-              <Button onClick={() => console.log("delete")}>Delete</Button>
+              <Button
+                onClick={() => {
+                  handleDelete();
+                  setEntry(artist);
+                }}
+              >
+                Delete
+              </Button>
             </Col>
           </Row>
         ))}
       </div>
-
       <SearchBar searchFunc={searchArtist} />
       <Button onClick={handleShow}>Add an artist</Button>
       <AddPopUp show={show} handler={handleShow} addFunc={createArtist} />
@@ -111,6 +134,12 @@ export default function Index() {
         handler={handleUpdate}
         artist={artistEntry}
         onUpdate={updateRate}
+      />
+      <DeletePopUp
+        show={showDelete}
+        handler={handleDelete}
+        artist={artistEntry}
+        onDelete={deleteArtist}
       />
     </section>
   );

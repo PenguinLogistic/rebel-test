@@ -17,7 +17,7 @@ export default function popUp({ show, handler, addFunc }) {
             <Form.Label>Streams</Form.Label>
             <Form.Control type="number" min="0" required />
           </Form.Group>
-          <Button onClick={handler}>Close</Button>
+          <Button onClick={handler}>Exit</Button>
           <Button type="submit">Add</Button>
         </Form>
       </Modal.Body>

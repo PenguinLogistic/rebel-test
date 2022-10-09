@@ -17,4 +17,8 @@ module.exports = {
     const updatedRoster = await Roster.findByIdAndUpdate(id, data);
     return updatedRoster;
   },
+  deleteRoster: async (id) => {
+    const deletedRoster = await Roster.findByIdAndRemove(id);
+    return deletedRoster;
+  },
 };
