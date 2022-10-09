@@ -38,9 +38,9 @@ router.get("/:id", async (req, res) => {
 });
 
 // /api/roster/:id Updating a db document
-router.put("/:id", async (req, res) => {
+router.put("/rate/:id", async (req, res) => {
   try {
-    const updatedEntry = await rosterServices.findByIdAndUpdate(req.params.id, {
+    const updatedRate = await rosterServices.findByIdAndUpdate(req.params.id, {
       rate: req.body.rate,
     });
     res.status(200).send("Successfully updated an entry!");
@@ -58,6 +58,17 @@ router.delete("/:id", async (req, res) => {
   }
 });
 
+// /api/roster/:id Updating a db document
+router.put("/paid/:id", async (req, res) => {
+  try {
+    const updatedPaid = await rosterServices.findByIdAndUpdate(req.params.id, {
+      isPaid: req.body.isPaid,
+    });
+    res.status(200).send("Successfully updated an entry!");
+  } catch (err) {
+    return res.status(500).send(err);
+  }
+});
 module.exports = router;
 
 // endpoints or routes

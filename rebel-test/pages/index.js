@@ -6,6 +6,7 @@ import AddPopUp from "../components/AddPopUp";
 import UpdatePopUp from "../components/UpdatePopUp";
 import DeletePopUp from "../components/DeletePopUp";
 import SearchBar from "../components/SearchBar";
+import PayToggle from "../components/PayToggle";
 
 export default function Index() {
   const [artistData, setData] = useState([]);
@@ -29,6 +30,7 @@ export default function Index() {
         artist: event.target[0].value.trim(),
         rate: event.target[1].value,
         streams: event.target[2].value,
+        isPaid: false,
       });
     }
     fetchDefault();
@@ -37,7 +39,6 @@ export default function Index() {
   //Request to search for an artist in the db
   const searchArtist = async (event) => {
     event.preventDefault();
-    console.log("searching... roger roger");
     if (event.target[0].value.trim() === "") {
       fetchDefault();
     } else {
@@ -51,7 +52,7 @@ export default function Index() {
   //Request to update the rate for an artist in the db
   const updateRate = async (event) => {
     event.preventDefault();
-    const res = await axios.put(`/api/roster/${artistEntry._id}`, {
+    const res = await axios.put(`/api/roster/rate/${artistEntry._id}`, {
       rate: event.target[0].value,
     });
     handleUpdate();
@@ -62,10 +63,17 @@ export default function Index() {
   //Request to delete an artist in the db
   const deleteArtist = async (event) => {
     event.preventDefault();
-    console.log(artistEntry._id);
     const res = await axios.delete(`api/roster/${artistEntry._id}`);
     setEntry("");
     handleDelete();
+    fetchDefault();
+  };
+
+  //Request to update the isPaid attribute for the artist in the db
+  const updatePaid = async (paidStatus, id) => {
+    axios.put(`/api/roster/paid/${id}`, {
+      isPaid: paidStatus,
+    });
     fetchDefault();
   };
 
@@ -104,11 +112,20 @@ export default function Index() {
               <div>{artist.streams * artist.rate}</div>
             </Col>
             <Col>
+              <PayToggle
+                isPaid={artist.isPaid}
+                toggleFunc={(newPaid) => {
+                  updatePaid(newPaid, artist._id);
+                }}
+              />
+            </Col>
+            <Col>
               <Button
                 onClick={() => {
                   handleUpdate();
                   setEntry(artist);
-                }}
+                }} // this onClick is a prop for the Button component, its a function passed as a prop
+                // PayToggle should have a similar concept
               >
                 Update
               </Button>
