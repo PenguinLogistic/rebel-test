@@ -109,7 +109,7 @@ export default function Index() {
               <div>{artist.streams}</div>
             </Col>
             <Col>
-              <div>{artist.streams * artist.rate}</div>
+              <div>{artist.owedAmount}</div>
             </Col>
             <Col>
               <PayToggle
@@ -124,8 +124,7 @@ export default function Index() {
                 onClick={() => {
                   handleUpdate();
                   setEntry(artist);
-                }} // this onClick is a prop for the Button component, its a function passed as a prop
-                // PayToggle should have a similar concept
+                }}
               >
                 Update
               </Button>

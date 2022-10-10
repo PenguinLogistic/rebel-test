@@ -5,7 +5,18 @@ const router = express.Router();
 
 // /api/roster
 router.get("/", async (req, res) => {
-  const allEntries = await rosterServices.find();
+  // const allEntries = await rosterServices.find();
+
+  const allEntries = await rosterServices.aggregate([
+    {
+      $addFields: {
+        owedAmount: { $multiply: ["$rate", "$streams"] },
+      },
+    },
+    {
+      $sort: { owedAmount: -1 },
+    },
+  ]);
   res.send(allEntries);
   return allEntries;
 });
@@ -23,16 +34,30 @@ router.post("/", async (req, res) => {
 // /api/roster/:id Search db documents
 router.get("/:id", async (req, res) => {
   try {
-    const foundEntries = await rosterServices.find({
-      artist: {
-        $regex: req.query.name,
-        $options: "i",
+    // const foundEntries = await rosterServices.find({
+    //   artist: {
+    //     $regex: req.query.name,
+    //     $options: "i",
+    //   },
+    // });
+    const foundEntries = await rosterServices.aggregate([
+      {
+        $match: { artist: { $regex: req.query.name, $options: "i" } },
       },
-    });
+      {
+        $addFields: {
+          owedAmount: { $multiply: ["$rate", "$streams"] },
+        },
+      },
+      {
+        $sort: { owedAmount: -1 },
+      },
+    ]);
     res.send(foundEntries);
     res.status(200);
     return foundEntries;
   } catch (err) {
+    console.log(err);
     return res.status(500).send(err);
   }
 });
