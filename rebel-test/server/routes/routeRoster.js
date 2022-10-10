@@ -5,6 +5,7 @@ const router = express.Router();
 
 // /api/roster
 router.get("/", async (req, res) => {
+  //old find call for getting all documents by default
   // const allEntries = await rosterServices.find();
 
   const allEntries = await rosterServices.aggregate([
@@ -34,6 +35,7 @@ router.post("/", async (req, res) => {
 // /api/roster/:id Search db documents
 router.get("/:id", async (req, res) => {
   try {
+    // old find call for searching specific artists
     // const foundEntries = await rosterServices.find({
     //   artist: {
     //     $regex: req.query.name,

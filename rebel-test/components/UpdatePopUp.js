@@ -1,4 +1,5 @@
 import { Modal, Form, Button } from "react-bootstrap";
+
 export default function UpdatePopUp({ show, handler, artist, onUpdate }) {
   return (
     <Modal show={show} onHide={handler}>
