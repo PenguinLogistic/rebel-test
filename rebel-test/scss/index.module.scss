@@ -12,3 +12,31 @@
   text-align: center;
   vertical-align: middle;
 }
+
+.header__wrapper {
+  margin-left: auto;
+  margin-right: auto;
+  position: absolute;
+  width: 60%;
+  top: 5%;
+}
+
+.inner__card {
+  width: 60%;
+  height: 80vh;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  margin-top: 125px;
+  background-color: white;
+}
+.main__card {
+  display: flex;
+  justify-content: center;
+  background-color: white;
+}
+
+.tablehead__wrapper {
+  position: sticky;
+  top: 0px;
+  background-color: lightblue;
+}

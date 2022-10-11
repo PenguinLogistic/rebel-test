@@ -126,10 +126,19 @@ export default function Index() {
   }, []);
 
   return (
-    <section>
-      <div>
-        <Table striped hover bordered>
-          <thead>
+    <section className={styles.main__card}>
+      <div className={styles.inner__card} md="auto">
+        <Row className={styles.header__wrapper}>
+          <Col>
+            <SearchBar searchFunc={searchArtist} resetFunc={fetchDefault} />
+          </Col>
+          <Col md="auto">
+            <Button onClick={handleShow}>Add an artist</Button>
+          </Col>
+        </Row>
+        <AddPopUp show={show} handler={handleShow} addFunc={createArtist} />
+        <Table striped hover bordered className={styles.table__container}>
+          <thead className={styles.tablehead__wrapper}>
             <tr className={styles.center__wrapper}>
               <th>Artist Name</th>
               <th>Rate</th>
@@ -190,9 +199,6 @@ export default function Index() {
           </tbody>
         </Table>
       </div>
-      <SearchBar searchFunc={searchArtist} resetFunc={fetchDefault} />
-      <Button onClick={handleShow}>Add an artist</Button>
-      <AddPopUp show={show} handler={handleShow} addFunc={createArtist} />
       <UpdatePopUp
         show={showUpdate}
         handler={handleUpdate}
