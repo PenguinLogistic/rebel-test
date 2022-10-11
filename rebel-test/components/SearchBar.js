@@ -15,11 +15,13 @@ export default function SearchBar({ searchFunc, resetFunc }) {
               />
             </Col>
             <Col className={styles.header__wrapper__submit} md="auto">
-              <Button type="submit">Search</Button>
+              <Button type="submit">
+                <i className="bi bi-search" />
+              </Button>
             </Col>
             <Col className={styles.header__wrapper__submit} md="auto">
               <Button type="reset" onClick={resetFunc}>
-                Reset
+                <i className="bi bi-arrow-clockwise" />
               </Button>
             </Col>
           </Row>

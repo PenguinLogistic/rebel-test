@@ -8,6 +8,7 @@ import DeletePopUp from "../components/DeletePopUp";
 import SearchBar from "../components/SearchBar";
 import PayToggle from "../components/PayToggle";
 import styles from "../scss/index.module.scss";
+import "bootstrap-icons/font/bootstrap-icons.css";
 
 export default function Index() {
   //setting state variables
@@ -49,8 +50,6 @@ export default function Index() {
   };
 
   //Request to search for an artist in the db
-  //Right now, you can refresh the screen by searching with a blank value
-  //or you could do a full refresh. Implement button when there is time.
   const searchArtist = async (event) => {
     event.preventDefault();
     try {
@@ -178,7 +177,7 @@ export default function Index() {
                           setEntry(artist);
                         }}
                       >
-                        Update
+                        <i class="bi bi-pencil-fill" />
                       </Button>
                     </Col>
                     <Col>
@@ -189,7 +188,7 @@ export default function Index() {
                           setEntry(artist);
                         }}
                       >
-                        Delete
+                        <i class="bi bi-trash-fill" />
                       </Button>
                     </Col>
                   </Row>
