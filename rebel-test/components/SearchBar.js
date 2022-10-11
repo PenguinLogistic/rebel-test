@@ -8,7 +8,7 @@ export default function SearchBar({ searchFunc, resetFunc }) {
           <Form.Control
             id="rateInput"
             type="text"
-            placeholder="Search by artist name, or reset by searching nothing"
+            placeholder="Search by artist name"
           />
         </Form.Group>
         <Button type="submit">Search</Button>

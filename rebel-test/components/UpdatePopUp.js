@@ -5,7 +5,9 @@ export default function UpdatePopUp({ show, handler, artist, onUpdate }) {
   return (
     <Modal show={show} onHide={handler}>
       <Modal.Header closeButton>
-        <Modal.Title>Update information on {artist.artist}</Modal.Title>
+        <Modal.Title className={styles.header__wrapper}>
+          Update information on {artist.artist}
+        </Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form as="form" onSubmit={onUpdate}>
