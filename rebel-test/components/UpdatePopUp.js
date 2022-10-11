@@ -1,4 +1,5 @@
-import { Modal, Form, Button } from "react-bootstrap";
+import { Modal, Form, Button, Row, Col } from "react-bootstrap";
+import styles from "../scss/UpdatePopUp.module.scss";
 
 export default function UpdatePopUp({ show, handler, artist, onUpdate }) {
   return (
@@ -11,16 +12,27 @@ export default function UpdatePopUp({ show, handler, artist, onUpdate }) {
           <Form.Group>
             <Form.Label>Enter new Rate</Form.Label>
             <Form.Control
+              className={styles.control__wrapper}
               type="number"
               step="any"
-              placeholder={artist.rate}
+              placeholder={`Former Rate: ` + artist.rate}
               min="0"
               autoFocus
               required
             />
           </Form.Group>
-          <Button onClick={handler}>Exit</Button>
-          <Button type="submit">Update</Button>
+          <Row>
+            <Col className={styles.form__container}>
+              <Button className={styles.button__wrapper} onClick={handler}>
+                Exit
+              </Button>
+            </Col>
+            <Col className={styles.form__container}>
+              <Button className={styles.button__wrapper} type="submit">
+                Update
+              </Button>
+            </Col>
+          </Row>
         </Form>
       </Modal.Body>
     </Modal>

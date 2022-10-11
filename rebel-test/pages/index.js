@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Row, Col, Button } from "react-bootstrap";
+import { Row, Col, Button, Table } from "react-bootstrap";
 import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
 import AddPopUp from "../components/AddPopUp";
@@ -7,6 +7,7 @@ import UpdatePopUp from "../components/UpdatePopUp";
 import DeletePopUp from "../components/DeletePopUp";
 import SearchBar from "../components/SearchBar";
 import PayToggle from "../components/PayToggle";
+import styles from "../scss/index.module.scss";
 
 export default function Index() {
   //setting state variables
@@ -27,6 +28,8 @@ export default function Index() {
   };
 
   //Request to add a new artist in the db based on user form input
+  //Only bug I can find is adding an artist that already exists with the same nam atm
+  //need to make an alert for the responses.
   const createArtist = async (event) => {
     event.preventDefault();
     handleShow(show);
@@ -125,50 +128,67 @@ export default function Index() {
   return (
     <section>
       <div>
-        {artistData.map((artist) => (
-          <Row key={artist._id}>
-            <Col>
-              <div>{artist.artist}</div>
-            </Col>
-            <Col>
-              <div>{artist.rate}</div>
-            </Col>
-            <Col>
-              <div>{artist.streams}</div>
-            </Col>
-            <Col>
-              <div>{artist.owedAmount}</div>
-            </Col>
-            <Col>
-              <PayToggle
-                isPaid={artist.isPaid}
-                toggleFunc={(newPaid) => {
-                  updatePaid(newPaid, artist._id);
-                }}
-              />
-            </Col>
-            <Col>
-              <Button
-                onClick={() => {
-                  handleUpdate();
-                  setEntry(artist);
-                }}
-              >
-                Update
-              </Button>
-            </Col>
-            <Col>
-              <Button
-                onClick={() => {
-                  handleDelete();
-                  setEntry(artist);
-                }}
-              >
-                Delete
-              </Button>
-            </Col>
-          </Row>
-        ))}
+        <Table striped hover bordered>
+          <thead>
+            <tr className={styles.center__wrapper}>
+              <th>Artist Name</th>
+              <th>Rate</th>
+              <th>Streams</th>
+              <th>Payout</th>
+              <th>Paid?</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {artistData.map((artist) => (
+              <tr key={artist._id} className={styles.center__wrapper}>
+                <td>{artist.artist}</td>
+                <td>{artist.rate}</td>
+                <td>{artist.streams.toLocaleString()}</td>
+                <td>
+                  {"$" +
+                    artist.owedAmount.toLocaleString(undefined, {
+                      maximumFractionDigits: 2,
+                    })}
+                </td>
+                <td>
+                  <PayToggle
+                    isPaid={artist.isPaid}
+                    toggleFunc={(newPaid) => {
+                      updatePaid(newPaid, artist._id);
+                    }}
+                  />
+                </td>
+                <td>
+                  <Row>
+                    <Col>
+                      <Button
+                        className={styles.update__wrapper}
+                        onClick={() => {
+                          handleUpdate();
+                          setEntry(artist);
+                        }}
+                      >
+                        Update
+                      </Button>
+                    </Col>
+                    <Col>
+                      <Button
+                        className={styles.delete__wrapper}
+                        onClick={() => {
+                          handleDelete();
+                          setEntry(artist);
+                        }}
+                      >
+                        Delete
+                      </Button>
+                    </Col>
+                  </Row>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
       </div>
       <SearchBar searchFunc={searchArtist} resetFunc={fetchDefault} />
       <Button onClick={handleShow}>Add an artist</Button>
