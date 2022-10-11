@@ -6,6 +6,14 @@
 
 .delete__wrapper {
   margin-left: -15%;
+  background-color: $red;
+  border-color: $red;
+}
+
+.delete__wrapper:hover {
+  margin-left: -15%;
+  background-color: $dark-red;
+  border-color: $dark-red;
 }
 
 .center__wrapper {
@@ -18,7 +26,15 @@
   margin-right: auto;
   position: absolute;
   width: 60%;
-  top: 5%;
+  top: 125px;
+}
+
+.alert__wrapper {
+  margin-left: auto;
+  margin-right: auto;
+  position: absolute;
+  width: 60%;
+  top: 2%;
 }
 
 .inner__card {
@@ -26,7 +42,7 @@
   height: 80vh;
   overflow-y: scroll;
   overflow-x: hidden;
-  margin-top: 125px;
+  margin-top: 190px;
   background-color: white;
 }
 .main__card {

@@ -8,3 +8,13 @@
 .header__wrapper {
   text-align: center;
 }
+
+.delete__wrapper {
+  background-color: $red;
+  border-color: $red;
+}
+
+.delete__wrapper:hover {
+  background-color: $dark-red;
+  border-color: $dark-red;
+}

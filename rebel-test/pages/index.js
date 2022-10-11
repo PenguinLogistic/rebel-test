@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Row, Col, Button, Table } from "react-bootstrap";
+import { Row, Col, Button, Table, Alert } from "react-bootstrap";
 import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
 import AddPopUp from "../components/AddPopUp";
@@ -16,7 +16,10 @@ export default function Index() {
   const [show, setShow] = useState(false);
   const [showUpdate, setUpdate] = useState(false);
   const [showDelete, setDelete] = useState(false);
+  const [showAlert, setAlert] = useState(false);
   const [artistEntry, setEntry] = useState("");
+  const [variantType, setVariant] = useState("");
+  const [alertMessage, setAlertMess] = useState("");
 
   //Request to grab all rows of data in the database
   const fetchDefault = async () => {
@@ -24,13 +27,13 @@ export default function Index() {
       const res = await axios.get("/api/roster");
       setData(res.data);
     } catch (err) {
-      console.log(err);
+      setAlert(true);
+      setAlertMess("There was an error trying to GET ALL artists");
+      setVariant("danger");
     }
   };
 
   //Request to add a new artist in the db based on user form input
-  //Only bug I can find is adding an artist that already exists with the same nam atm
-  //need to make an alert for the responses.
   const createArtist = async (event) => {
     event.preventDefault();
     handleShow(show);
@@ -42,10 +45,15 @@ export default function Index() {
           streams: event.target[2].value,
           isPaid: false,
         });
+        setAlert(true);
+        setAlertMess("An artist was created.");
+        setVariant("success");
       }
       await fetchDefault();
     } catch (err) {
-      console.log(err);
+      setAlert(true);
+      setAlertMess("There was an error trying to CREATE an artist.");
+      setVariant("danger");
     }
   };
 
@@ -62,7 +70,9 @@ export default function Index() {
         setData(res.data);
       }
     } catch (err) {
-      console.log(err);
+      setAlert(true);
+      setAlertMess("There was an error trying to FIND an artist.");
+      setVariant("danger");
     }
   };
 
@@ -75,9 +85,14 @@ export default function Index() {
       });
       setEntry("");
       handleUpdate();
+      setAlert(true);
+      setAlertMess("An artist was updated.");
+      setVariant("success");
       await fetchDefault();
     } catch (err) {
-      console.log(err);
+      setAlert(true);
+      setAlertMess("There was an error trying to UPDATE an artist's Rate");
+      setVariant("danger");
     }
   };
 
@@ -87,10 +102,15 @@ export default function Index() {
     try {
       const res = await axios.delete(`api/roster/${artistEntry._id}`);
       setEntry("");
+      setAlert(true);
+      setAlertMess("An artist was deleted.");
+      setVariant("success");
       handleDelete();
       await fetchDefault();
     } catch (err) {
-      console.log(err);
+      setAlert(true);
+      setAlertMess("There was an error trying to DELETE an artist");
+      setVariant("danger");
     }
   };
 
@@ -102,7 +122,9 @@ export default function Index() {
       });
       await fetchDefault();
     } catch (err) {
-      console.log(err);
+      setAlert(true);
+      setAlertMess("There was an error trying to UPDATE an artist's pay");
+      setVariant("danger");
     }
   };
 
@@ -126,15 +148,26 @@ export default function Index() {
 
   return (
     <section className={styles.main__card}>
+      <Row className={styles.alert__wrapper}>
+        {showAlert && (
+          <Alert
+            variant={variantType}
+            onClose={() => setAlert(false)}
+            dismissible
+          >
+            <Alert.Heading>{alertMessage}</Alert.Heading>
+          </Alert>
+        )}
+      </Row>
+      <Row className={styles.header__wrapper}>
+        <Col>
+          <SearchBar searchFunc={searchArtist} resetFunc={fetchDefault} />
+        </Col>
+        <Col md="auto">
+          <Button onClick={handleShow}>Add an artist</Button>
+        </Col>
+      </Row>
       <div className={styles.inner__card} md="auto">
-        <Row className={styles.header__wrapper}>
-          <Col>
-            <SearchBar searchFunc={searchArtist} resetFunc={fetchDefault} />
-          </Col>
-          <Col md="auto">
-            <Button onClick={handleShow}>Add an artist</Button>
-          </Col>
-        </Row>
         <AddPopUp show={show} handler={handleShow} addFunc={createArtist} />
         <Table striped hover bordered className={styles.table__container}>
           <thead className={styles.tablehead__wrapper}>
@@ -177,7 +210,7 @@ export default function Index() {
                           setEntry(artist);
                         }}
                       >
-                        <i class="bi bi-pencil-fill" />
+                        <i className="bi bi-pencil-fill" />
                       </Button>
                     </Col>
                     <Col>
@@ -188,7 +221,7 @@ export default function Index() {
                           setEntry(artist);
                         }}
                       >
-                        <i class="bi bi-trash-fill" />
+                        <i className="bi bi-trash-fill" />
                       </Button>
                     </Col>
                   </Row>
