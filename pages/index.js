@@ -203,6 +203,7 @@ export default function Index() {
                     {"$" +
                       artist.owedAmount.toLocaleString(undefined, {
                         maximumFractionDigits: 2,
+                        minimumFractionDigits: 2,
                       })}
                   </td>
                   <td>
