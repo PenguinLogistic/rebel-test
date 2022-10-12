@@ -15,7 +15,9 @@ app
     server.use(express.json());
     server.use(express.urlencoded({ extended: true }));
 
-    mongoose.connect("mongodb://localhost:27017/Rebel");
+    mongoose.connect(
+      dev ? "mongodb://localhost:27017/Rebel" : process.env.MONGODBI_URI
+    );
     mongoose.connection.on("connected", () =>
       console.log("Connected to Rebel db")
     );
