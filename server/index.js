@@ -10,20 +10,22 @@ const handle = app.getRequestHandler();
 
 app
   .prepare()
-  .then(() => {
+  .then(async () => {
     const server = express();
     server.use(express.json());
     server.use(express.urlencoded({ extended: true }));
 
     console.log(process.env.MONGODBI_URI);
     console.log(process.env.NODE_ENV);
-    mongoose.connect(
-      "mongodb+srv://ryan:Start123@rebel-cluster.lyov7s6.mongodb.net/Rebel"
-    );
-    mongoose.connection.on("connected", () =>
-      console.log("Connected to Rebel db")
-    );
-
+    try {
+      await mongoose.connect(
+        "mongodb+srv://ryan:Start123@rebel-cluster.lyov7s6.mongodb.net/Rebel"
+      );
+      console.log("Connected to Rebel db");
+    } catch (err) {
+      console.log(err);
+      throw err;
+    }
     server.use("/api/roster", rosterRoutes);
 
     server.all("*", (req, res) => {
