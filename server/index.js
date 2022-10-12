@@ -15,6 +15,8 @@ app
     server.use(express.json());
     server.use(express.urlencoded({ extended: true }));
 
+    console.log(process.env.MONGODBI_URI);
+    console.log(process.env.NODE_ENV);
     mongoose.connect(
       dev ? "mongodb://localhost:27017/Rebel" : process.env.MONGODBI_URI
     );
