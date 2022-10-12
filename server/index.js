@@ -26,7 +26,7 @@ app
 
     server.use("/api/roster", rosterRoutes);
 
-    server.get("*", (req, res) => {
+    server.all("*", (req, res) => {
       return handle(req, res);
     });
     server.listen(PORT, (err) => {
