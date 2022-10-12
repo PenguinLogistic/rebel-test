@@ -1,13 +1,14 @@
 import { useState, useEffect } from "react";
 import { Row, Col, Button, Table, Alert } from "react-bootstrap";
+import Head from "next/head";
 import axios from "axios";
-import "bootstrap/dist/css/bootstrap.min.css";
 import AddPopUp from "../components/AddPopUp";
 import UpdatePopUp from "../components/UpdatePopUp";
 import DeletePopUp from "../components/DeletePopUp";
 import SearchBar from "../components/SearchBar";
 import PayToggle from "../components/PayToggle";
 import styles from "../scss/index.module.scss";
+import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 
 export default function Index() {
@@ -52,7 +53,11 @@ export default function Index() {
       await fetchDefault();
     } catch (err) {
       setAlert(true);
-      setAlertMess("There was an error trying to CREATE an artist.");
+      if (err.response.data.code === 11000) {
+        setAlertMess("This artist already exists.");
+      } else {
+        setAlertMess("There was an error trying to CREATE an artist.");
+      }
       setVariant("danger");
     }
   };
@@ -147,102 +152,110 @@ export default function Index() {
   }, []);
 
   return (
-    <section className={styles.main__card}>
-      <Row className={styles.alert__wrapper}>
-        {showAlert && (
-          <Alert
-            variant={variantType}
-            onClose={() => setAlert(false)}
-            dismissible
-          >
-            <Alert.Heading>{alertMessage}</Alert.Heading>
-          </Alert>
-        )}
-      </Row>
-      <Row className={styles.header__wrapper}>
-        <Col>
-          <SearchBar searchFunc={searchArtist} resetFunc={fetchDefault} />
-        </Col>
-        <Col md="auto">
-          <Button onClick={handleShow}>Add an artist</Button>
-        </Col>
-      </Row>
-      <div className={styles.inner__card} md="auto">
-        <AddPopUp show={show} handler={handleShow} addFunc={createArtist} />
-        <Table striped hover bordered className={styles.table__container}>
-          <thead className={styles.tablehead__wrapper}>
-            <tr className={styles.center__wrapper}>
-              <th>Artist Name</th>
-              <th>Rate</th>
-              <th>Streams</th>
-              <th>Payout</th>
-              <th>Paid?</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            {artistData.map((artist) => (
-              <tr key={artist._id} className={styles.center__wrapper}>
-                <td>{artist.artist}</td>
-                <td>{artist.rate}</td>
-                <td>{artist.streams.toLocaleString()}</td>
-                <td>
-                  {"$" +
-                    artist.owedAmount.toLocaleString(undefined, {
-                      maximumFractionDigits: 2,
-                    })}
-                </td>
-                <td>
-                  <PayToggle
-                    isPaid={artist.isPaid}
-                    toggleFunc={(newPaid) => {
-                      updatePaid(newPaid, artist._id);
-                    }}
-                  />
-                </td>
-                <td>
-                  <Row>
-                    <Col>
-                      <Button
-                        className={styles.update__wrapper}
-                        onClick={() => {
-                          handleUpdate();
-                          setEntry(artist);
-                        }}
-                      >
-                        <i className="bi bi-pencil-fill" />
-                      </Button>
-                    </Col>
-                    <Col>
-                      <Button
-                        className={styles.delete__wrapper}
-                        onClick={() => {
-                          handleDelete();
-                          setEntry(artist);
-                        }}
-                      >
-                        <i className="bi bi-trash-fill" />
-                      </Button>
-                    </Col>
-                  </Row>
-                </td>
+    <>
+      <Head>
+        <title>Rebel Roster</title>
+        <meta
+          name="viewport"
+          content="minimum-scale=1, initial-scale=1, width=device-width"
+        />
+      </Head>
+      <section className={styles.main__card}>
+        <Row className={styles.alert__wrapper}>
+          {showAlert && (
+            <Alert
+              variant={variantType}
+              onClose={() => setAlert(false)}
+              dismissible
+            >
+              <Alert.Heading>{alertMessage}</Alert.Heading>
+            </Alert>
+          )}
+        </Row>
+        <Row className={styles.header__wrapper}>
+          <Col>
+            <SearchBar searchFunc={searchArtist} resetFunc={fetchDefault} />
+          </Col>
+          <Col md="auto">
+            <Button onClick={handleShow}>Add an artist</Button>
+          </Col>
+        </Row>
+        <div className={styles.inner__card} md="auto">
+          <AddPopUp show={show} handler={handleShow} addFunc={createArtist} />
+          <Table striped hover bordered className={styles.table__container}>
+            <thead className={styles.tablehead__wrapper}>
+              <tr className={styles.center__wrapper}>
+                <th>Artist Name</th>
+                <th>Rate</th>
+                <th>Streams</th>
+                <th>Payout</th>
+                <th>Paid?</th>
+                <th></th>
               </tr>
-            ))}
-          </tbody>
-        </Table>
-      </div>
-      <UpdatePopUp
-        show={showUpdate}
-        handler={handleUpdate}
-        artist={artistEntry}
-        onUpdate={updateRate}
-      />
-      <DeletePopUp
-        show={showDelete}
-        handler={handleDelete}
-        artist={artistEntry}
-        onDelete={deleteArtist}
-      />
-    </section>
+            </thead>
+            <tbody>
+              {artistData.map((artist) => (
+                <tr key={artist._id} className={styles.center__wrapper}>
+                  <td>{artist.artist}</td>
+                  <td>{artist.rate}</td>
+                  <td>{artist.streams.toLocaleString()}</td>
+                  <td>
+                    {"$" +
+                      artist.owedAmount.toLocaleString(undefined, {
+                        maximumFractionDigits: 2,
+                      })}
+                  </td>
+                  <td>
+                    <PayToggle
+                      isPaid={artist.isPaid}
+                      toggleFunc={(newPaid) => {
+                        updatePaid(newPaid, artist._id);
+                      }}
+                    />
+                  </td>
+                  <td>
+                    <Row>
+                      <Col>
+                        <Button
+                          className={styles.update__wrapper}
+                          onClick={() => {
+                            handleUpdate();
+                            setEntry(artist);
+                          }}
+                        >
+                          <i className="bi bi-pencil-fill" />
+                        </Button>
+                        <Button
+                          variant="danger"
+                          className={styles.delete__wrapper}
+                          onClick={() => {
+                            handleDelete();
+                            setEntry(artist);
+                          }}
+                        >
+                          <i className="bi bi-trash-fill" />
+                        </Button>
+                      </Col>
+                    </Row>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+        </div>
+        <UpdatePopUp
+          show={showUpdate}
+          handler={handleUpdate}
+          artist={artistEntry}
+          onUpdate={updateRate}
+        />
+        <DeletePopUp
+          show={showDelete}
+          handler={handleDelete}
+          artist={artistEntry}
+          onDelete={deleteArtist}
+        />
+      </section>
+    </>
   );
 }

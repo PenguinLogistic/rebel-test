@@ -15,7 +15,7 @@ export default function UpdatePopUp({ show, handler, artist, onDelete }) {
               <Button onClick={handler}>Exit</Button>
             </Col>
             <Col className={styles.button__container}>
-              <Button type="submit" className={styles.delete__wrapper}>
+              <Button type="submit" variant="danger">
                 Delete
               </Button>
             </Col>
