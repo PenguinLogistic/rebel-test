@@ -217,7 +217,6 @@ export default function Index() {
                     <Row>
                       <Col>
                         <Button
-                          className={styles.update__wrapper}
                           onClick={() => {
                             handleUpdate();
                             setEntry(artist);
