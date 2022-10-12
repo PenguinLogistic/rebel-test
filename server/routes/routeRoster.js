@@ -7,19 +7,22 @@ const router = express.Router();
 router.get("/", async (req, res) => {
   //old find call for getting all documents by default
   // const allEntries = await rosterServices.find();
-
-  const allEntries = await rosterServices.aggregate([
-    {
-      $addFields: {
-        owedAmount: { $multiply: ["$rate", "$streams"] },
+  try {
+    const allEntries = await rosterServices.aggregate([
+      {
+        $addFields: {
+          owedAmount: { $multiply: ["$rate", "$streams"] },
+        },
       },
-    },
-    {
-      $sort: { owedAmount: -1 },
-    },
-  ]);
-  res.send(allEntries);
-  return allEntries;
+      {
+        $sort: { owedAmount: -1 },
+      },
+    ]);
+    return res.send(allEntries);
+  } catch (err) {
+    console.log(err);
+    return res.status(500).send(err);
+  }
 });
 
 // /api/roster Adding db document
@@ -55,9 +58,7 @@ router.get("/:id", async (req, res) => {
         $sort: { owedAmount: -1 },
       },
     ]);
-    res.send(foundEntries);
-    res.status(200);
-    return foundEntries;
+    return res.status(200).send(foundEntries);
   } catch (err) {
     console.log(err);
     return res.status(500).send(err);
@@ -70,7 +71,7 @@ router.put("/rate/:id", async (req, res) => {
     const updatedRate = await rosterServices.findByIdAndUpdate(req.params.id, {
       rate: req.body.rate,
     });
-    res.status(200).send("Successfully updated an entry!");
+    return res.status(200).send("Successfully updated an entry!");
   } catch (err) {
     return res.status(500).send(err);
   }
@@ -79,7 +80,7 @@ router.put("/rate/:id", async (req, res) => {
 router.delete("/:id", async (req, res) => {
   try {
     const deletedEntry = await rosterServices.findByIdAndRemove(req.params.id);
-    res.status(200).send("Successfully deleted an entry!");
+    return res.status(200).send("Successfully deleted an entry!");
   } catch (err) {
     res.status(500).send(err);
   }
@@ -91,7 +92,7 @@ router.put("/paid/:id", async (req, res) => {
     const updatedPaid = await rosterServices.findByIdAndUpdate(req.params.id, {
       isPaid: req.body.isPaid,
     });
-    res.status(200).send("Successfully updated an entry!");
+    return res.status(200).send("Successfully updated an entry!");
   } catch (err) {
     return res.status(500).send(err);
   }
