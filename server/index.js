@@ -15,11 +15,9 @@ app
     server.use(express.json());
     server.use(express.urlencoded({ extended: true }));
 
-    console.log(process.env.MONGODBI_URI);
-    console.log(process.env.NODE_ENV);
     try {
       await mongoose.connect(
-        "mongodb+srv://ryan:Start123@rebel-cluster.lyov7s6.mongodb.net/Rebel"
+        dev ? "mongodb://localhost:27017/Rebel" : process.env.MONGODBI_URI
       );
       console.log("Connected to Rebel db");
     } catch (err) {
